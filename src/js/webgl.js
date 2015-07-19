@@ -5,10 +5,10 @@ function WebGlView()
 	this.juliaInitialized = false;
 	this.scene = new THREE.Scene();
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
-	this.camera.position.x = 100;
+	this.camera.position.x = 50;
 	this.camera.position.z = 0;
 	this.camera.position.y = 50;
-	this.camera.lookAt(new THREE.Vector3(50,20,50));
+	this.camera.lookAt(new THREE.Vector3(0,0,0));
 	this.camera.updateProjectionMatrix();
 
 	this.renderer = new THREE.WebGLRenderer();
@@ -19,7 +19,7 @@ function WebGlView()
 	{
 		this.dataSize = size || 0;
 		this.juliaSet = juliaSet;
-		this.data = Array(this.dataSize);
+	this.data = Array(this.dataSize);
 		var i=0;
 		var t=0;
 		// Calculate data
@@ -28,9 +28,10 @@ function WebGlView()
 			this.data[i] = Array(this.dataSize);
 			for(t=0;t<this.dataSize;t++)
 			{
+				var zoom = 2.5;
 				this.data[i][t] = this.juliaSet.calculateValue(
-					i/(this.dataSize || 0.0)*2.5-1.25,
-					t/(this.dataSize || 0.0)*2.5-1.25
+					i/(this.dataSize || 0.0)*zoom-zoom/2,
+					t/(this.dataSize || 0.0)*zoom-zoom/2
 					);
 				if(this.data[i][t] > 0.6)
 					this.data[i][t] = 0.6;
@@ -44,7 +45,7 @@ function WebGlView()
 			for(t=0;t<this.dataSize;t++)
 			{
 				geometry.vertices.push(
-					new THREE.Vector3(i,this.data[i][t]*20,t)
+					new THREE.Vector3(i-this.dataSize/2,this.data[i][t]*20,t-this.dataSize/2)
 				);
 			}
 		}
@@ -84,12 +85,12 @@ function WebGlView()
 		var ambientLight = new THREE.AmbientLight(0x222222);
 		this.scene.add(ambientLight);
 		//Directional Light
-		//var directionalLight = new THREE.DirectionalLight(0xffffff);
-		//directionalLight.position.set(0, 1, 0).normalize();
-		//this.scene.add(directionalLight);
-		var light = new THREE.PointLight(0xffffff, 1, 80);
-		light.position.set(50, 50, 50);
-		this.scene.add(light);
+		var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+		directionalLight.position.set(10, 50, 10).normalize();
+		this.scene.add(directionalLight);
+		//var light = new THREE.PointLight(0xffffff, 1, 80);
+		//light.position.set(0, 50, 0);
+		//this.scene.add(light);
 		this.juliaInitialized = true;
 	};
 
