@@ -6,7 +6,7 @@ function WebGlView()
 	this.scene = new THREE.Scene();
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 	this.camera.position.x = 100;
-	this.camera.position.y = 100;
+	this.camera.position.z = 0;
 	this.camera.position.y = 50;
 	this.camera.lookAt(new THREE.Vector3(50,20,50));
 	this.camera.updateProjectionMatrix();
@@ -29,11 +29,11 @@ function WebGlView()
 			for(t=0;t<this.dataSize;t++)
 			{
 				this.data[i][t] = this.juliaSet.calculateValue(
-					i/(this.dataSize || 0.0)*5-2.5,
-					t/(this.dataSize || 0.0)*5-2.5
+					i/(this.dataSize || 0.0)*2.5-1.25,
+					t/(this.dataSize || 0.0)*2.5-1.25
 					);
-				if(this.data[i][t] > 2000)
-					this.data[i][t] = 2000;
+				if(this.data[i][t] > 0.6)
+					this.data[i][t] = 0.6;
 			}
 		}
 		// Calculate geometry
@@ -44,7 +44,7 @@ function WebGlView()
 			for(t=0;t<this.dataSize;t++)
 			{
 				geometry.vertices.push(
-					new THREE.Vector3(i,this.data[i][t]/100,t)
+					new THREE.Vector3(i,this.data[i][t]*20,t)
 				);
 			}
 		}
@@ -63,23 +63,39 @@ function WebGlView()
 				);
 			}
 		}
-		//var geometry = new THREE.BoxGeometry(1,1,1);
+		geometry.computeBoundingSphere();
+		//geometry = new THREE.TorusKnotGeometry( 10, 3, 100, 16 );
+		geometry.computeFaceNormals();
+		geometry.computeVertexNormals();
 		// Material
-		var material = new THREE.MeshBasicMaterial({
-			color: 0x00ff00,
-			wireframe: true
+		var material = new THREE.MeshPhongMaterial({
+			color: 0x11ee11,
+			wireframe: false,
+			side: THREE.DoubleSide
 		});
+		
 		// Object
 		this.juliaSurface = new THREE.Mesh(geometry, material);
+		this.juliaSurface.overdraw = true;
 		// Add object to scene
 		this.scene.add( this.juliaSurface);
-		// juliaSet is now initialized
+		//Light
+		//Ambient
+		var ambientLight = new THREE.AmbientLight(0x222222);
+		this.scene.add(ambientLight);
+		//Directional Light
+		//var directionalLight = new THREE.DirectionalLight(0xffffff);
+		//directionalLight.position.set(0, 1, 0).normalize();
+		//this.scene.add(directionalLight);
+		var light = new THREE.PointLight(0xffffff, 1, 80);
+		light.position.set(50, 50, 50);
+		this.scene.add(light);
 		this.juliaInitialized = true;
 	};
 
 	this.render = function()
 	{
-		requestAnimationFrame(this.render);
+		//requestAnimationFrame(this.render);
 		this.renderer.render( this.scene, this.camera);
 	};
 }
