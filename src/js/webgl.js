@@ -4,7 +4,7 @@ function WebGlView()
 {
 	this.juliaInitialized = false;
 	this.scene = new THREE.Scene();
-	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+	this.camera = new THREE.PerspectiveCamera( 75, (window.innerWidth-50)/(window.innerHeight-50), 0.1, 1000 );
 	this.camera.position.x = 50;
 	this.camera.position.z = 0;
 	this.camera.position.y = 50;
@@ -12,14 +12,15 @@ function WebGlView()
 	this.camera.updateProjectionMatrix();
 
 	this.renderer = new THREE.WebGLRenderer();
-	this.renderer.setSize( window.innerWidth, window.innerHeight );
+	this.renderer.setSize( (window.innerWidth-50), (window.innerHeight-50) );
 	document.body.appendChild( this.renderer.domElement );
 	
-	this.initJulia = function(juliaSet, size)
+	this.initJulia = function(juliaSet, size, xOffset, yOffset, scale)
 	{
 		this.dataSize = size || 0;
+		this.scene = new THREE.Scene();
 		this.juliaSet = juliaSet;
-	this.data = Array(this.dataSize);
+		this.data = Array(this.dataSize);
 		var i=0;
 		var t=0;
 		// Calculate data
@@ -28,10 +29,10 @@ function WebGlView()
 			this.data[i] = Array(this.dataSize);
 			for(t=0;t<this.dataSize;t++)
 			{
-				var zoom = 2.5;
+				var zoom = scale;
 				this.data[i][t] = this.juliaSet.calculateValue(
-					i/(this.dataSize || 0.0)*zoom-zoom/2,
-					t/(this.dataSize || 0.0)*zoom-zoom/2
+					(i/(this.dataSize || 0.0)+xOffset)*zoom-zoom/2,
+					(t/(this.dataSize || 0.0)+yOffset)*zoom-zoom/2
 					);
 				if(this.data[i][t] > 0.6)
 					this.data[i][t] = 0.6;

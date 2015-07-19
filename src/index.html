@@ -7,14 +7,13 @@
 		<script type="text/javascript" src="js/webgl.js"></script>
 		<script type="text/javascript" src="js/main.js"></script>
 	</head>
-	<body onload="init();">
-	<h1>Julia3D</h1><br/>
+	<body onload="init();go();">
 	<!-- <canvas id="canvas" width="1024" height="714">U have a browser that is 2 old m8!</canvas><br/> -->
-	<div id="inputs">
+	<div id="inputs" style="display: none">
 		K1: <input type="text" id="k1" value="-0.72" /><br/>
 		K2: <input type="text" id="k2" value="-0.029" /><br/>
 		n max: <input type="number" id="n" value="10" /><br/>
-	<input type="button" value="GO GO GO" onclick="go();" />
+		<input type="button" value="GO GO GO" onclick="go();" />
 	</div>
 	</body>
 </html>
