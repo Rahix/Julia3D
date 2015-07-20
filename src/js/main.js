@@ -3,7 +3,8 @@ var view;
 
 function init()
 {
-	view = new WebGlView();
+	//view = new WebGlView();
+	view = new QuaternionView();
 }
 var k1;
 var k2;
@@ -12,6 +13,7 @@ var xOff;
 var yOff;
 var scale;
 var juliaSet;
+var quaternionSet;
 function go()
 {
 	k1 = parseFloat(document.getElementById("k1").value);
@@ -20,8 +22,11 @@ function go()
 	xOff = 0.0;
 	yOff = 0.0;
 	scale = 2.5;
-	juliaSet = new JuliaSet(k1, k2, nMax);
-	view.initJulia(juliaSet, 100, xOff, yOff, scale);
+	//juliaSet = new JuliaSet(k1, k2, nMax);
+	//view.initJulia(juliaSet, 100, xOff, yOff, scale);
+	//view.render();
+	quaternionSet = new JuliaQuaternion(-0.72, -0.029, 1.0, 200000000000);
+	view.initJulia(quaternionSet);
 	view.render();
 }
 
@@ -52,6 +57,6 @@ window.onkeyup = function(e)
 		default:
 			return;
 	}
-	view.initJulia(juliaSet, 100, xOff, yOff, scale);
-	view.render();
+	//view.initJulia(juliaSet, 100, xOff, yOff, scale);
+	//view.render();
 };
